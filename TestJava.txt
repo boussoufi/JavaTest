@@ -1,0 +1,88 @@
+* ALGO 1:
+      function solution(N, A) {
+        var j;
+        var i;
+        var len = A.length;
+        var lastMax = 0;
+        var max = 0; 
+        var counters = new Array (N);
+        for(j = 0; j < N; j++) counters[j] = 0;
+        var n1 = N + 1;
+
+        for(j=0; j < len; j++){
+            if(A[j] < n1){
+                i = A[j] - 1;
+                if (counters[i] < lastMax) counters[i] = lastMax;
+                counters[i]++;
+                if (max < counters[i]) max = counters[i];
+            } else {
+                lastMax = max;
+            }
+        }
+
+        for(j = 0; j < N; j++){
+          if (counters[j] < lastMax) counters[j] = lastMax;
+        }
+
+        return counters;
+    }
+-----------------------------------------------------------------------
+       * ALGO 2 :
+          public class Ladder {
+          public int[] solution(int[] A, int[] B) {
+            final int[] cn = new int[A.length < 2 ? 2 : A.length];
+            cn[0] = 1;
+            cn[1] = 2;
+            for (int i = 2; i < A.length; i++) {
+                cn[i] = (cn[i - 1] + cn[i - 2]) & ((1 << 30) - 1);
+            }
+            for (int i = 0; i < a.length; i++) {
+                A[i] = cn[A[i] - 1] & ((1 << B[i]) - 1);
+            }
+            return A;
+           }
+        }
+        
+      -----------------------------------------------------------------------
+      * ALGO 3:
+      public class MinAbsSum {
+    public int solution(int[] A) {
+        if (A.length == 0) {
+            return 0;
+        }
+        int sum = 0;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < A.length; i++) {
+            final int value = Math.abs(A[i]);
+            sum += value;
+            if (max < value) {
+                max = value;
+            }
+            A[i] = value;
+        }
+        final int[] counts = new int[max + 1];
+        for (int value: A) {
+            counts[value]++;
+        }
+        final int[] r = new int[sum + 1];
+        for (int i = 1; i < r.length; i++) {
+            r[i] = -1;
+        }
+        for (int i = 1; i < counts.length; i++) {
+            for (int j = 0; j < r.length; j++) {
+                if (r[j] >= 0) {
+                    r[j] = counts[i];
+                } else if (j - i >= 0 && r[j - i] > 0) {
+                    r[j] = r[j - i] - 1;
+                }
+            }
+        }
+        int result = sum;
+        for (int i = 0; i < r.length / 2 + 1; i++) {
+            if (r[i] >= 0 && result > Math.abs(sum - 2 * i)) {
+                result = Math.abs(sum - 2 * i);
+            }
+        }
+        return result;
+    }
+}
